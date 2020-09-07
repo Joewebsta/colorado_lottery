@@ -2,7 +2,7 @@ require './lib/contestant'
 
 describe Contestant do
   subject do
-    Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: state.to_s, spending_money: 10 })
+    Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: 'CO', spending_money: 10 })
   end
 
   describe '#init' do
@@ -39,19 +39,25 @@ describe Contestant do
 
   describe '#out_of_state?' do
     context 'when out of state' do
-      let(:state) { 'MA' }
+      contestant = Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: 'MA', spending_money: 10 })
 
-      it 'returns false' do
-        expect(subject.out_of_state?).to be true
+      it 'returns true' do
+        expect(contestant.out_of_state?).to be true
       end
     end
 
     context 'when in-state' do
-      let(:state) { 'CO' }
-
-      it 'returns true' do
+      it 'returns false' do
         expect(subject.out_of_state?).to be false
       end
+    end
+  end
+
+  describe '#add_game_interest' do
+    it 'adds a game interest' do
+      subject.add_game_interest('Mega Millions')
+      subject.add_game_interest('Pick 4')
+      expect(subject.game_interests).to eql(['Mega Millions', 'Pick 4'])
     end
   end
 end
