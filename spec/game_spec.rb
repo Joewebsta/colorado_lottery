@@ -22,13 +22,13 @@ describe Game do
   end
 
   context 'when national_drawing argument not provided' do
-    it 'should return false' do
+    it 'returns false' do
       expect(subject.national_drawing?).to be false
     end
   end
 
   context 'when national_drawing argument provided' do
-    it 'should return true' do
+    it 'returns true' do
       game = Game.new('Pick 4', 2, true)
       expect(game.national_drawing?).to be true
     end

@@ -2,10 +2,12 @@ require './lib/contestant'
 
 describe Contestant do
   subject do
-    Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: 'CO', spending_money: 10 })
+    Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: state.to_s, spending_money: 10 })
   end
 
   describe '#init' do
+    let(:state) { 'CO' }
+
     it 'is an instance of Game' do
       is_expected.to be_an_instance_of Contestant
     end
@@ -32,6 +34,24 @@ describe Contestant do
 
     it 'has no game interests' do
       expect(subject.game_interests).to eql([])
+    end
+  end
+
+  describe '#out_of_state?' do
+    context 'when out of state' do
+      let(:state) { 'MA' }
+
+      it 'returns false' do
+        expect(subject.out_of_state?).to be true
+      end
+    end
+
+    context 'when in-state' do
+      let(:state) { 'CO' }
+
+      it 'returns true' do
+        expect(subject.out_of_state?).to be false
+      end
     end
   end
 end
