@@ -20,6 +20,10 @@ describe Contestant do
       expect(subject.last_name).to eql 'Webster'
     end
 
+    it 'has a full name' do
+      expect(subject.full_name).to eql 'Joe Webster'
+    end
+
     it 'has an age' do
       expect(subject.age).to eql 32
     end
