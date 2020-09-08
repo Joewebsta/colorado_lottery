@@ -1,10 +1,10 @@
 class ColoradoLottery
-  attr_reader :registered_contestants, :winners, :current_contestants
+  attr_reader :registered_contestants, :current_contestants, :winners
 
   def initialize
     @registered_contestants = {}
-    @winners = []
     @current_contestants = {}
+    @winners = []
   end
 
   def interested_and_18?(contestant, game)
@@ -41,5 +41,14 @@ class ColoradoLottery
         current_contestants[game] = [contestant.full_name]
       end
     end
+  end
+
+  def draw_winners
+    current_contestants.each do |game, contestants|
+      winner_name = contestants.sample
+      winners << { winner_name => game.name }
+    end
+
+    Time.now.strftime('%Y-%m-%d')
   end
 end

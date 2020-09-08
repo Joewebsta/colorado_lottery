@@ -5,11 +5,6 @@ require './lib/colorado_lottery'
 describe ColoradoLottery do
   subject { ColoradoLottery.new }
 
-  # let(:alexander) { Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 28, state_of_residence: 'CO', spending_money: 10 }) }
-  # let(:benjamin) { Contestant.new({ first_name: 'Benjamin', last_name: 'Franklin', age: 17, state_of_residence: 'PA', spending_money: 100 }) }
-  # let(:frederick) { Contestant.new({ first_name: 'Frederick', last_name: 'Douglas', age: 55, state_of_residence: 'NY', spending_money: 20 }) }
-  # let(:winston) { Contestant.new({ first_name: 'Winston', last_name: 'Churchill', age: 18, state_of_residence: 'CO', spending_money: 5 }) }
-
   describe '#init' do
     it 'is an instance of ColoradoLottery' do
       is_expected.to be_an_instance_of ColoradoLottery
@@ -172,6 +167,42 @@ describe ColoradoLottery do
 
     it 'updates current_contestants hash' do
       expect(subject.current_contestants).to eql({ @mega_millions => [@joe.full_name] })
+    end
+  end
+
+  describe '#draw_winners' do
+    before do
+      @mega_millions = Game.new('Mega Millions', 5)
+      @cash5 = Game.new('Cash 5', 1, true)
+      @alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 28, state_of_residence: 'CO', spending_money: 10 })
+      @joe = Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: 'CO', spending_money: 100 })
+      @joe.add_game_interest('Mega Millions')
+      @joe.add_game_interest('Cash 5')
+      @alex.add_game_interest('Mega Millions')
+      subject.register_contestant(@joe, @mega_millions)
+      subject.register_contestant(@joe, @cash5)
+      subject.register_contestant(@alex, @mega_millions)
+      subject.charge_contestants(@mega_millions)
+      subject.charge_contestants(@cash5)
+      @drawing_date = subject.draw_winners
+    end
+
+    it 'returns the date of the drawing' do
+      date_format = Time.now.strftime('%Y-%m-%d')
+      expect(@drawing_date).to eql(date_format)
+    end
+
+    it 'updates the winners array' do
+      expect(subject.winners.count).to eql(subject.current_contestants.count)
+    end
+
+    it 'updates an instance of Array' do
+      expect(subject.winners).to be_an_instance_of Array
+    end
+
+    it 'populates the winners array with hashes' do
+      expect(subject.winners.first.class).to eql Hash
+      expect(subject.winners.last.class).to eql Hash
     end
   end
 end
