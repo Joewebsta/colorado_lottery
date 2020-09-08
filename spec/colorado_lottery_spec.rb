@@ -156,4 +156,22 @@ describe ColoradoLottery do
       end
     end
   end
+
+  describe '#charge_contestants' do
+    before do
+      @mega_millions = Game.new('Mega Millions', 5)
+      @joe = Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: 'CO', spending_money: 10 })
+      @joe.add_game_interest('Mega Millions')
+      subject.register_contestant(@joe, @mega_millions)
+      subject.charge_contestants(@mega_millions)
+    end
+
+    it 'charges eligible contestants' do
+      expect(@joe.spending_money).to eql 5
+    end
+
+    it 'updates current_contestants hash' do
+      expect(subject.current_contestants).to eql({ @mega_millions => [@joe.full_name] })
+    end
+  end
 end

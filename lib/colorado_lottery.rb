@@ -30,4 +30,16 @@ class ColoradoLottery
 
     registered_contestants[game.name].find_all { |contestant| contestant.spending_money > game.cost }
   end
+
+  def charge_contestants(game)
+    eligible_contestants(game).each do |contestant|
+      contestant.spending_money -= game.cost
+
+      if current_contestants[game]
+        current_contestants[game] << contestant.full_name
+      else
+        current_contestants[game] = [contestant.full_name]
+      end
+    end
+  end
 end
