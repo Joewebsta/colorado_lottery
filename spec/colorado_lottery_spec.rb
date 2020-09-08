@@ -29,11 +29,9 @@ describe ColoradoLottery do
   end
 
   describe '#interested_and_18?' do
-    before do
-      @mega_millions = Game.new('Mega Millions', 5, true)
-    end
+    before { @mega_millions = Game.new('Mega Millions', 5) }
 
-    context 'interested and 18' do
+    context 'when interested and 18' do
       it 'returns true' do
         alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 28, state_of_residence: 'CO', spending_money: 10 })
         alex.add_game_interest('Mega Millions')
@@ -41,14 +39,14 @@ describe ColoradoLottery do
       end
     end
 
-    context 'not interested and 18' do
+    context 'when not interested and 18' do
       it 'returns false' do
         alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 28, state_of_residence: 'CO', spending_money: 10 })
         expect(subject.interested_and_18?(alex, @mega_millions)).to be false
       end
     end
 
-    context 'interested and not 18' do
+    context 'when interested and not 18' do
       it 'returns false' do
         alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 15, state_of_residence: 'CO', spending_money: 10 })
         alex.add_game_interest('Mega Millions')
@@ -56,10 +54,40 @@ describe ColoradoLottery do
       end
     end
 
-    context 'not interested and not 18' do
+    context 'when not interested and not 18' do
       it 'returns false' do
         alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 15, state_of_residence: 'CO', spending_money: 10 })
         expect(subject.interested_and_18?(alex, @mega_millions)).to be false
+      end
+    end
+  end
+
+  describe '#can_register?' do
+    before do
+      @mega_millions = Game.new('Mega Millions', 5)
+      @cash_5 = Game.new('Cash 5', 1, true)
+    end
+
+    context 'when interested_and_18? is true and CO resident' do
+      it 'returns true' do
+        alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 25, state_of_residence: 'CO', spending_money: 10 })
+        alex.add_game_interest('Mega Millions')
+        expect(subject.can_register?(alex, @mega_millions)).to be true
+      end
+    end
+
+    context 'when interested_and_18? is true and national game' do
+      it 'returns true' do
+        alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 25, state_of_residence: 'MA', spending_money: 10 })
+        alex.add_game_interest('Cash 5')
+        expect(subject.can_register?(alex, @cash_5)).to be true
+      end
+    end
+
+    context 'when interested_and_18? is false' do
+      it 'returns false' do
+        alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 25, state_of_residence: 'CO', spending_money: 10 })
+        expect(subject.can_register?(alex, @cash_5)).to be false
       end
     end
   end
