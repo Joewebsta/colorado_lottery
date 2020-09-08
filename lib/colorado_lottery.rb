@@ -51,4 +51,13 @@ class ColoradoLottery
 
     Time.now.strftime('%Y-%m-%d')
   end
+
+  def announce_winner(game_name)
+    date = draw_winners
+    formatted_date = date[5, 9]
+    winner_hash = winners.find { |name_game_hash| name_game_hash.values.include?(game_name) }
+    winner_name = winner_hash.key(game_name)
+
+    "#{winner_name} won the #{game_name} on #{formatted_date}."
+  end
 end
