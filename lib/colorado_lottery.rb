@@ -24,4 +24,10 @@ class ColoradoLottery
       registered_contestants[game.name] = [contestant]
     end
   end
+
+  def eligible_contestants(game)
+    return [] if registered_contestants.empty?
+
+    registered_contestants[game.name].find_all { |contestant| contestant.spending_money > game.cost }
+  end
 end

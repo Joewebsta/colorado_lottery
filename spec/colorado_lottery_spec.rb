@@ -130,4 +130,30 @@ describe ColoradoLottery do
       end
     end
   end
+
+  describe '#eligible_contestants' do
+    before do
+      @mega_millions = Game.new('Mega Millions', 5)
+    end
+
+    context 'when registered contestant has enough money' do
+      it 'returns array of eligible contestant' do
+        alex = Contestant.new({ first_name: 'Alexander', last_name: 'Aigades', age: 28, state_of_residence: 'CO', spending_money: 10 })
+        alex.add_game_interest('Mega Millions')
+        subject.register_contestant(alex, @mega_millions)
+
+        expect(subject.eligible_contestants(@mega_millions)).to eql([alex])
+      end
+    end
+
+    context 'when registered contestant does not have enough money' do
+      it 'does not return array of contestant ' do
+        joe = Contestant.new({ first_name: 'Joe', last_name: 'Webster', age: 32, state_of_residence: 'MA', spending_money: 4 })
+        joe.add_game_interest('Mega Millions')
+        subject.register_contestant(joe, @mega_millions)
+
+        expect(subject.eligible_contestants(@mega_millions)).to eql([])
+      end
+    end
+  end
 end
