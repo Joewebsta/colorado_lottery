@@ -12,14 +12,6 @@ describe Contestant do
       is_expected.to be_an_instance_of Contestant
     end
 
-    it 'has a first name' do
-      expect(subject.first_name).to eql 'Joe'
-    end
-
-    it 'has a last name' do
-      expect(subject.last_name).to eql 'Webster'
-    end
-
     it 'has a full name' do
       expect(subject.full_name).to eql 'Joe Webster'
     end
